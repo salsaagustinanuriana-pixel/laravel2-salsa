@@ -13,3 +13,5 @@ class Dosen extends Model
         return $this->hasMany(Mahasiswa::class, 'id_dosen');
     }
 }
+
+

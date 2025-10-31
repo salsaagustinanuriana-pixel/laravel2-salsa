@@ -3,8 +3,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Dosen;
 use Illuminate\Database\Seeder;
+use App\Models\Dosen;
+
 
 class DosenMahasiswaSeeder extends Seeder
 {

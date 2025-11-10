@@ -81,11 +81,13 @@ Route::resource('wali',WaliController::class);
 
 Route::resource('pelanggan',App\Http\Controllers\PelangganController::class);
 
+Route::resource('produk',App\Http\Controllers\ProdukController::class);
+
 Route::resource('produk-stok',ProdukStokController::class)->parameters([
     'produk-stok' => 'produk',
 ]);
 
-Route::resource('transaksis', App\Http\Controllers\TransaksiController::class);
+Route::resource('transaksi', App\Http\Controllers\TransaksiController::class);
 
 
 Route::resource('detail_transaksi',App\Http\Controllers\DetailTransaksiController::class);

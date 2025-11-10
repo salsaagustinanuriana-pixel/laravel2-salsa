@@ -6,17 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-       Schema::create('produks', function (Blueprint $table) {
-        $table->id();
-        $table->string('nama');
-        $table->text('deskripsi');
-        $table->integer('harga');
-        $table->string('image');
-        $table->timestamps();
-     });
-
+        Schema::create('produks', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_produk');
+            $table->integer('harga');
+            $table->string('stok');
+            $table->timestamps();
+        });
     }
 
     /**

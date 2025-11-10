@@ -2,31 +2,56 @@
 
 @section('content')
 <div class="container">
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h4 class="fw-bold">Tambah Pelanggan</h4>
-        </div>
-        <div class="col-md-6 text-end">
-            <a href="{{ route('pelanggan.index') }}" class="btn btn-secondary">Kembali</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-start">
+                        Tambah Pelanggan
+                    </div>
+                    <div class="float-end">
+                        <a href="{{ route('pelanggan.index') }}" class="btn btn-sm btn-outline-primary">Kembali</a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <form action="{{ route('pelanggan.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label">Nama Pelanggan</label>
+                            <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ old('nama') }}" placeholder="Nama Pelanggan" required>
+                            @error('nama')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">No Telepon</label>
+                            <input type="number" class="form-control @error('no_telepon') is-invalid @enderror" name="no_telepon" value="{{ old('no_telepon') }}" placeholder="no_telepon" required>
+                            @error('no_telepon')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">alamat</label>
+                            <textarea class="form-control @error('alamat') is-invalid @enderror" name="alamat" rows="3" placeholder="alamat" required>{{ old('alamat') }}</textarea>
+                            @error('alamat')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                        <button type="reset" class="btn btn-sm btn-warning">Reset</button>
+
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-
-    <form action="{{ route('pelanggan.store') }}" method="POST">
-        @csrf
-        <div class="mb-3">
-            <label for="nama" class="form-label">Nama Pelanggan</label>
-            <input type="text" name="nama" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="no_hp" class="form-label">No HP</label>
-            <input type="text" name="no_hp" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="alamat" class="form-label">Alamat</label>
-            <textarea name="alamat" class="form-control" rows="3" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-success">Simpan</button>
-    </form>
 </div>
 @endsection
-

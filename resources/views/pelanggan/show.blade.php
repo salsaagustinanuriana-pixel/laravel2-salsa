@@ -2,28 +2,25 @@
 
 @section('content')
 <div class="container">
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h4 class="fw-bold">Detail Pelanggan</h4>
-        </div>
-        <div class="col-md-6 text-end">
-            <a href="{{ route('pelanggan.index') }}" class="btn btn-secondary">Kembali</a>
-        </div>
-    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>{{ __('Detail Produk') }}</span>
+                    <a href="{{ route('produk.index') }}" class="btn btn-sm btn-outline-primary">Kembali</a>
+                </div>
 
-    <div class="card border-dark">
-        <div class="card-body">
-            <div class="mb-2 d-flex">
-                <strong class="me-2">Nama:</strong>
-                <span>{{ $pelanggan->nama }}</span>
-            </div>
-            <div class="mb-2 d-flex">
-                <strong class="me-2">No HP:</strong>
-                <span>{{ $pelanggan->no_hp }}</span>
-            </div>
-            <div class="mb-2 d-flex">
-                <strong class="me-2">Alamat:</strong>
-                <span>{{ $pelanggan->alamat }}</span>
+                <div class="card-body">
+                    @if ($produk->image)
+                    <img src="{{ Storage::url($produk->image)  }}" class="w-100 rounded mb-3" alt="{{ $produk->nama }}">
+                    @else
+                    <img src="{{ asset('images/no-image.png') }}" class="w-100 rounded mb-3" alt="No Image">
+                    @endif
+
+                    <h4 class="fw-bold">{{ $produk->nama }}</h4>
+                    <p class="mt-2 mb-1">Harga: <strong>Rp{{ number_format($produk->harga, 0, ',', '.') }}</strong></p>
+                    <p class="mt-2">{!! $produk->deskripsi !!}</p>
+                </div>
             </div>
         </div>
     </div>

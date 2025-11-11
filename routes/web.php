@@ -7,7 +7,7 @@ use App\Http\Controllers\DosenController;
 use App\Http\Controllers\WaliController;
 use App\Http\Controllers\HobiController;
 use App\Http\Controllers\ProdukStokController;
-use App\Http\Controllers\PembayaranController;
+
 
 
 use App\Models\Wali;
@@ -79,21 +79,10 @@ Route::resource('mahasiswa',App\Http\Controllers\MahasiswaController::class);
 
 Route::resource('wali',WaliController::class);
 
-Route::resource('pelanggan',App\Http\Controllers\PelangganController::class);
-
-Route::resource('produk',App\Http\Controllers\ProdukController::class);
-
-Route::resource('produk-stok',ProdukStokController::class)->parameters([
-    'produk-stok' => 'produk',
-]);
-
+Route::get('transaksi/search', [ App\Http\Controllers\TransaksiController::class, 'search'])->name('transaksi.search');
+Route::resource('pelanggan', App\Http\Controllers\PelangganController::class);
+Route::resource('produk', App\Http\Controllers\ProdukController::class);
 Route::resource('transaksi', App\Http\Controllers\TransaksiController::class);
-
-
-Route::resource('detail_transaksi',App\Http\Controllers\DetailTransaksiController::class);
-
-Route::resource('pembayarans',PembayaranController::class);
-
-
+Route::resource('pembayaran', App\Http\Controllers\PembayaranController::class);
 
 

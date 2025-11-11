@@ -1,46 +1,98 @@
 @extends('layouts.app')
+
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">Edit Pembayaran</div>
-                <div class="card-body">
-                    <form action="{{ route('pembayarans.update', $pembayaran->id) }}" method="post">
-                        @csrf
-                        @method('PUT')
-                        <div class="mb-3">
-                            <label> Transaksi</label>
-                            <input type="text" value="{{ $pembayaran->transaksi->kode_transaksi }}" class="form-control" disabled>
-                        </div>
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Edit Pembayaran</h5>
+            <a href="{{ route('pembayaran.index') }}" class="btn btn-light btn-sm">Kembali</a>
+        </div>
 
-                        <div class="mb-3">
-                            <label>Metode Pembayaran</label>
-                            <select name="metode" class="form-control @error('metode') is-invalid @enderror">
-                                <option value="">-- Pilih Metode --</option>
-                                <option value="tunai" {{ old('metode', $pembayaran->metode) == 'tunai' ? 'selected' : '' }}>Tunai</option>
-                                <option value="transfer" {{ old('metode', $pembayaran->metode) == 'transfer' ? 'selected' : '' }}>Transfer</option>
-                                <option value="qris" {{ old('metode', $pembayaran->metode) == 'qris' ? 'selected' : '' }}>QRIS</option>
-                            </select>
-                            @error('metode')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Jumlah Bayar</label>
-                            <input type="number" step="0.01" name="jumlah_bayar" value="{{ old('jumlah_bayar', $pembayaran->jumlah_bayar) }}" class="form-control @error('jumlah_bayar') is-invalid @enderror">
-                            @error('jumlah_bayar')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn btn-success">Update</button>
-                        <a href="{{ route('transaksis.show', $pembayaran->transaksi_id) }}" class="btn btn-secondary">Batal</a>
-                    </form>
-                </div>
+        <div class="card-body">
+            {{-- Notifikasi Error --}}
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>Terjadi kesalahan:</strong>
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $err)
+                    <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
             </div>
+            @endif
+
+            <form action="{{ route('pembayaran.update', $pembayaran->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                {{-- Info Transaksi --}}
+                <div class="mb-3">
+                    <label class="form-label">Kode Transaksi</label>
+                    <input type="text" class="form-control" value="{{ $pembayaran->transaksi->kode_transaksi }}" readonly>
+                    <input type="hidden" name="id_transaksi" value="{{ $pembayaran->transaksi->id }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Nama Pelanggan</label>
+                    <input type="text" class="form-control" value="{{ $pembayaran->transaksi->pelanggan->nama }}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Total Harga</label>
+                    <input type="text" id="total_harga" class="form-control" value="Rp{{ number_format($pembayaran->transaksi->total_harga, 0, ',', '.') }}" readonly>
+                </div>
+
+                <hr>
+
+                {{-- Form Pembayaran --}}
+                <div class="mb-3">
+                    <label class="form-label">Tanggal Bayar</label>
+                    <input type="date" name="tanggal_bayar" class="form-control" value="{{ $pembayaran->tanggal_bayar }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Metode Pembayaran</label>
+                    <select name="metode_pembayaran" class="form-select" required>
+                        <option value="">-- Pilih Metode --</option>
+                        <option value="cash" {{ $pembayaran->metode_pembayaran == 'cash' ? 'selected' : '' }}>Cash</option>
+                        <option value="credit" {{ $pembayaran->metode_pembayaran == 'credit' ? 'selected' : '' }}>Credit</option>
+                        <option value="debit" {{ $pembayaran->metode_pembayaran == 'debit' ? 'selected' : '' }}>Debit</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Jumlah Bayar</label>
+                    <input type="number" name="jumlah_bayar" id="jumlah_bayar" class="form-control" min="0" value="{{ $pembayaran->jumlah_bayar }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Kembalian</label>
+                    <input type="text" name="kembalian" id="kembalian" class="form-control" value="Rp{{ number_format($pembayaran->kembalian, 0, ',', '.') }}" readonly>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">Update Pembayaran</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-@endsection
 
+{{-- Script --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const totalHargaInput = document.getElementById('total_harga');
+        const jumlahBayarInput = document.getElementById('jumlah_bayar');
+        const kembalianInput = document.getElementById('kembalian');
+
+        jumlahBayarInput.addEventListener('input', function() {
+            const total = parseInt(totalHargaInput.value.replace(/[^0-9]/g, '')) || 0;
+            const bayar = parseInt(this.value) || 0;
+            let kembali = bayar - total;
+            if (kembali < 0) kembali = 0;
+            kembalianInput.value = 'Rp' + kembali.toLocaleString('id-ID');
+        });
+    });
+
+</script>
+@endsection

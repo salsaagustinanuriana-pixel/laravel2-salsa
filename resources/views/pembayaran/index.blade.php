@@ -5,7 +5,7 @@
     <div class="card shadow-sm border-0">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Data Pembayaran</h5>
-            <a href="{{ route('pembayaran.create') }}" class="btn btn-light btn-sm">+ Tambah Pembayaran</a>
+            <a href="{{ route('pembayaran.create') }}" class="btn btn-light btn-3">+ Tambah Pembayaran</a>
         </div>
 
         <div class="card-body">
